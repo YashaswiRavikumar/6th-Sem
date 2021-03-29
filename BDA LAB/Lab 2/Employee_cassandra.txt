@@ -1,1 +1,144 @@
-eployee>
+cqlsh> USE employee
+   ... 
+cqlsh> USE employee;
+cqlsh:employee> create table employee_info( emp_id int PRIMARY KEY, emp_name text, designation text, date_of_joining timestamp, salary int, dept_name text);
+cqlsh:employee> select * from employee_info;
+
+ emp_id | date_of_joining | dept_name | designation | emp_name | salary
+--------+-----------------+-----------+-------------+----------+--------
+
+(0 rows)
+cqlsh:employee> BEGIN BATCH
+            ... INSERT INTO
+            ... employee_info(emp_id,emp_name,designation,date_of_joining,salary,dept_name)
+            ... VALUES(111,'Rama','Manager','2012-03-29',150000,'Research')
+            ... INSERT INTO
+            ...             ... employee_info(emp_id,emp_name,designation,date_of_joining,salary,dept_name)
+            ... 
+[1]+  Stopped                 cqlsh
+hp@hp-HP-Pavilion-x360-Convertible-14-dh1xxx:~$ cqlsh
+Connected to Test Cluster at 127.0.0.1:9042.
+[cqlsh 5.0.1 | Cassandra 4.0 | CQL spec 3.4.5 | Native protocol v4]
+Use HELP for help.
+cqlsh> USE employee
+   ... 
+[2]+  Stopped                 cqlsh
+hp@hp-HP-Pavilion-x360-Convertible-14-dh1xxx:~$ cqlsh
+^[[AConnected to Test Cluster at 127.0.0.1:9042.
+[cqlsh 5.0.1 | Cassandra 4.0 | CQL spec 3.4.5 | Native protocol v4]
+Use HELP for help.
+cqlsh> USE employee;
+cqlsh:employee> select * from employee_info;
+
+ emp_id | date_of_joining | dept_name | designation | emp_name | salary
+--------+-----------------+-----------+-------------+----------+--------
+
+(0 rows)
+cqlsh:employee> BEGIN BATCH
+            ... INSERT INTO
+            ... employee_info(emp_id,emp_name,designation,date_of_joining,salary,dept_name)
+            ... VALUES(111,'Rama','Manager','2012-03-29',150000,'Research')
+            ... APPLY BATCH;
+cqlsh:employee> select * from employee_info;
+
+ emp_id | date_of_joining                 | dept_name | designation | emp_name | salary
+--------+---------------------------------+-----------+-------------+----------+--------
+    111 | 2012-03-28 18:30:00.000000+0000 |  Research |     Manager |     Rama | 150000
+
+(1 rows)
+cqlsh:employee> BEGIN BATCH INSERT INTO employee_info(emp_id,emp_name,designation,date_of_joining,salary,dept_name) VALUES(121,'Raju','Engineer','2016-05-15',50000,'Research') APPLY BATCH;
+cqlsh:employee> select * from employee_info;
+
+ emp_id | date_of_joining                 | dept_name | designation | emp_name | salary
+--------+---------------------------------+-----------+-------------+----------+--------
+    111 | 2012-03-28 18:30:00.000000+0000 |  Research |     Manager |     Rama | 150000
+    121 | 2016-05-14 18:30:00.000000+0000 |  Research |    Engineer |     Raju |  50000
+
+(2 rows)
+cqlsh:employee> BEGIN BATCH INSERT INTO employee_info(emp_id,emp_name,designation,date_of_joining,salary,dept_name) VALUES(131,'Raju','Junior Engineer','2019-06-20',30000,'Research') APPLY BATCH;
+cqlsh:employee> BEGIN BATCH INSERT INTO employee_info(emp_id,emp_name,designation,date_of_joining,salary,dept_name) VALUES(141,'Raju','Senior Manager','2010-01-21',300000,'Research') APPLY BATCH;
+cqlsh:employee> select * from employee_info;
+
+ emp_id | date_of_joining                 | dept_name | designation     | emp_name | salary
+--------+---------------------------------+-----------+-----------------+----------+--------
+    111 | 2012-03-28 18:30:00.000000+0000 |  Research |         Manager |     Rama | 150000
+    121 | 2016-05-14 18:30:00.000000+0000 |  Research |        Engineer |     Raju |  50000
+    141 | 2010-01-20 18:30:00.000000+0000 |  Research |  Senior Manager |     Raju | 300000
+    131 | 2019-06-19 18:30:00.000000+0000 |  Research | Junior Engineer |     Raju |  30000
+
+(4 rows)
+cqlsh:employee> UPDATE employee_info
+            ... SET emp_name="Gopi",dept_name="Analytics"
+            ... WHERE emp_id=121;
+SyntaxException: line 2:19 no viable alternative at input ',' (UPDATE employee_infoSET emp_name=["Gop]i",...)
+cqlsh:employee> UPDATE employee_info SET emp_name='Gopi',dept_name='Analytics' WHERE emp_id=121;
+cqlsh:employee> select * from employee_info;
+
+ emp_id | date_of_joining                 | dept_name | designation     | emp_name | salary
+--------+---------------------------------+-----------+-----------------+----------+--------
+    111 | 2012-03-28 18:30:00.000000+0000 |  Research |         Manager |     Rama | 150000
+    121 | 2016-05-14 18:30:00.000000+0000 | Analytics |        Engineer |     Gopi |  50000
+    141 | 2010-01-20 18:30:00.000000+0000 |  Research |  Senior Manager |     Raju | 300000
+    131 | 2019-06-19 18:30:00.000000+0000 |  Research | Junior Engineer |     Raju |  30000
+
+(4 rows)
+cqlsh:employee> UPDATE employee_info SET emp_name='Surya' WHERE emp_id=141;
+cqlsh:employee> select * from employee_info;
+
+ emp_id | date_of_joining                 | dept_name | designation     | emp_name | salary
+--------+---------------------------------+-----------+-----------------+----------+--------
+    111 | 2012-03-28 18:30:00.000000+0000 |  Research |         Manager |     Rama | 150000
+    121 | 2016-05-14 18:30:00.000000+0000 | Analytics |        Engineer |     Gopi |  50000
+    141 | 2010-01-20 18:30:00.000000+0000 |  Research |  Senior Manager |    Surya | 300000
+    131 | 2019-06-19 18:30:00.000000+0000 |  Research | Junior Engineer |     Raju |  30000
+
+(4 rows)
+cqlsh:employee> UPDATE employee_info SET project='CQL' WHERE emp_id=111;
+cqlsh:employee> UPDATE employee_info SET project='Flutter' WHERE emp_id=121;
+cqlsh:employee> UPDATE employee_info SET project='Data Science' WHERE emp_id=141;
+cqlsh:employee> UPDATE employee_info SET project='Java Script' WHERE emp_id=131;
+cqlsh:employee> select * from employee_info;
+
+ emp_id | date_of_joining                 | dept_name | designation     | emp_name | project      | salary
+--------+---------------------------------+-----------+-----------------+----------+--------------+--------
+    111 | 2012-03-28 18:30:00.000000+0000 |  Research |         Manager |     Rama |          CQL | 150000
+    121 | 2016-05-14 18:30:00.000000+0000 | Analytics |        Engineer |     Gopi |      Flutter |  50000
+    141 | 2010-01-20 18:30:00.000000+0000 |  Research |  Senior Manager |    Surya | Data Science | 300000
+    131 | 2019-06-19 18:30:00.000000+0000 |  Research | Junior Engineer |     Raju |  Java Script |  30000
+
+(4 rows)
+cqlsh:employee> insert into employee_info(emp_id,emp_name,designation,dept_name,date_of_joining,project) values (151,'Ravi','ANALYST','SALES','2015-03-21','SQL') using ttl 15 ;
+cqlsh:employee> select emp_id,ttl(emp_name),ttl(dept_name) from employee_info;
+
+ emp_id | ttl(emp_name) | ttl(dept_name)
+--------+---------------+----------------
+    111 |          null |           null
+    151 |            11 |             11
+    121 |          null |           null
+    141 |          null |           null
+    131 |          null |           null
+
+(5 rows)
+cqlsh:employee> select * from employee_info;
+
+ emp_id | date_of_joining                 | dept_name | designation     | emp_name | project      | salary
+--------+---------------------------------+-----------+-----------------+----------+--------------+--------
+    111 | 2012-03-28 18:30:00.000000+0000 |  Research |         Manager |     Rama |          CQL | 150000
+    151 | 2015-03-20 18:30:00.000000+0000 |     SALES |         ANALYST |     Ravi |          SQL |   null
+    121 | 2016-05-14 18:30:00.000000+0000 | Analytics |        Engineer |     Gopi |      Flutter |  50000
+    141 | 2010-01-20 18:30:00.000000+0000 |  Research |  Senior Manager |    Surya | Data Science | 300000
+    131 | 2019-06-19 18:30:00.000000+0000 |  Research | Junior Engineer |     Raju |  Java Script |  30000
+
+(5 rows)
+cqlsh:employee> select * from employee_info;
+
+ emp_id | date_of_joining                 | dept_name | designation     | emp_name | project      | salary
+--------+---------------------------------+-----------+-----------------+----------+--------------+--------
+    111 | 2012-03-28 18:30:00.000000+0000 |  Research |         Manager |     Rama |          CQL | 150000
+    121 | 2016-05-14 18:30:00.000000+0000 | Analytics |        Engineer |     Gopi |      Flutter |  50000
+    141 | 2010-01-20 18:30:00.000000+0000 |  Research |  Senior Manager |    Surya | Data Science | 300000
+    131 | 2019-06-19 18:30:00.000000+0000 |  Research | Junior Engineer |     Raju |  Java Script |  30000
+
+(4 rows)
+
+
