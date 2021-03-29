@@ -1,1 +1,87 @@
-library>
+cqlsh:employee> USE library;
+cqlsh:library> CREATE TABLE library_info( stud_id int, counter_value counter, stud_name text, book_name text, book_id int, date_of_issue timestamp, PRIMARY KEY(stud_id,stud_name,book_name,book_id,date_of_issue) );
+cqlsh:library> select * from library_info;
+
+ stud_id | stud_name | book_name | book_id | date_of_issue | counter_value
+---------+-----------+-----------+---------+---------------+---------------
+
+(0 rows)
+cqlsh:library> UPDATE library_info SET counter_value=counter_value+1 WHERE stud_id=1 AND stud_name='ram'AND book_name='Wings of Fire'AND book_id=1123 AND date_of_issue='2021-03-20';
+cqlsh:library> select * from library_info;
+
+ stud_id | stud_name | book_name     | book_id | date_of_issue                   | counter_value
+---------+-----------+---------------+---------+---------------------------------+---------------
+       1 |       ram | Wings of Fire |    1123 | 2021-03-19 18:30:00.000000+0000 |             1
+
+(1 rows)
+cqlsh:library> UPDATE library_info SET counter_value=counter_value+1 WHERE stud_id=2 AND stud_name='raju'AND book_name='Angels and demons' AND book_id=1123 AND date_of_issue='2021-03-15';
+cqlsh:library> select * from library_info;
+
+ stud_id | stud_name | book_name         | book_id | date_of_issue                   | counter_value
+---------+-----------+-------------------+---------+---------------------------------+---------------
+       1 |       ram |     Wings of Fire |    1123 | 2021-03-19 18:30:00.000000+0000 |             1
+       2 |      raju | Angels and demons |    1123 | 2021-03-14 18:30:00.000000+0000 |             1
+
+(2 rows)
+cqlsh:library> UPDATE library_info SET counter_value=counter_value+1 WHERE stud_id=112 AND stud_name='raju'AND book_name='BDA' AND book_id=1123 AND date_of_issue='2021-03-25';
+cqlsh:library> UPDATE library_info SET counter_value=counter_value+1 WHERE stud_id=112 AND stud_name='raju'AND book_name='BDA' AND book_id=1123 AND date_of_issue='2021-03-25';
+cqlsh:library> select * from library_info;
+
+ stud_id | stud_name | book_name         | book_id | date_of_issue                   | counter_value
+---------+-----------+-------------------+---------+---------------------------------+---------------
+       1 |       ram |     Wings of Fire |    1123 | 2021-03-19 18:30:00.000000+0000 |             1
+       2 |      raju | Angels and demons |    1123 | 2021-03-14 18:30:00.000000+0000 |             1
+     112 |      raju |               BDA |    1123 | 2021-03-24 18:30:00.000000+0000 |             2
+
+(3 rows)
+cqlsh:library> UPDATE library_info SET counter_value=counter_value+1 WHERE stud_id=1 AND stud_name='ram'AND book_name='Wings of Fire'AND book_id=1123 AND date_of_issue='2021-03-20';
+cqlsh:library> select * from library_info;
+
+ stud_id | stud_name | book_name     | book_id | date_of_issue                   | counter_value
+---------+-----------+---------------+---------+---------------------------------+---------------
+       1 |       ram | Wings of Fire |    1123 | 2021-03-19 18:30:00.000000+0000 |             1
+
+(1 rows)
+cqlsh:library> UPDATE library_info SET counter_value=counter_value+1 WHERE stud_id=2 AND stud_name='raju'AND book_name='Angels and demons' AND book_id=1123 AND date_of_issue='2021-03-15';
+cqlsh:library> select * from library_info;
+
+ stud_id | stud_name | book_name         | book_id | date_of_issue                   | counter_value
+---------+-----------+-------------------+---------+---------------------------------+---------------
+       1 |       ram |     Wings of Fire |    1123 | 2021-03-19 18:30:00.000000+0000 |             1
+       2 |      raju | Angels and demons |    1123 | 2021-03-14 18:30:00.000000+0000 |             1
+
+(2 rows)
+cqlsh:library> UPDATE library_info SET counter_value=counter_value+1 WHERE stud_id=112 AND stud_name='raju'AND book_name='BDA' AND book_id=1123 AND date_of_issue='2021-03-25';
+cqlsh:library> UPDATE library_info SET counter_value=counter_value+1 WHERE stud_id=112 AND stud_name='raju'AND book_name='BDA' AND book_id=1123 AND date_of_issue='2021-03-25';
+cqlsh:library> select * from library_info;
+
+ stud_id | stud_name | book_name         | book_id | date_of_issue                   | counter_value
+---------+-----------+-------------------+---------+---------------------------------+---------------
+       1 |       ram |     Wings of Fire |    1123 | 2021-03-19 18:30:00.000000+0000 |             1
+       2 |      raju | Angels and demons |    1123 | 2021-03-14 18:30:00.000000+0000 |             1
+     112 | COPY library_info(stud_id,stud_name,book_name,book_id,date_of_issue)TO'/home/hp/Desktop/library.csv';
+Using 7 child processes
+
+Starting copy of library.library_info with columns [stud_id, stud_name, book_name, book_id, date_of_issue,counter_value].
+cqlshlib.copyutil.ExportProcess.write_rows_to_csv(): writing row
+cqlshlib.copyutil.ExportProcess.write_rows_to_csv(): writing row
+cqlshlib.copyutil.ExportProcess.write_rows_to_csv(): writing row
+Processed: 3 rows; Rate:      15 rows/s; Avg. rate:      15 rows/s
+3 rows exported to 1 files in 0.214 seconds.
+
+cqlsh:library> TRUNCATE library_info;
+cqlsh:library> COPY library_info(stud_id,stud_name,book_name,book_id,date_of_issue,counter_value)FROM'/home/hp/Desktop/library.csv';
+Using 7 child processes
+
+Starting copy of library.library_info with columns [stud_id, stud_name, book_name, book_id, date_of_issue, counter_value].
+Processed: 3 rows; Rate:       6 rows/s; Avg. rate:       8 rows/s
+3 rows imported from 1 files in 0.369 seconds (0 skipped).
+cqlsh:library> select * from library_info;
+
+ stud_id | stud_name | book_name         | book_id | date_of_issue                   | counter_value
+---------+-----------+-------------------+---------+---------------------------------+---------------
+       1 |       ram |     Wings of Fire |    1123 | 2021-03-19 18:30:00.000000+0000 |             1
+       2 |       raj | Angels and demons |    1223 | 2021-03-09 18:30:00.000000+0000 |             1
+     112 |     surya |               BDA |     123 | 2021-03-27 18:30:00.000000+0000 |             2
+
+(3 rows)
