@@ -1,0 +1,59 @@
+use student
+
+
+db.student.insert({
+    Rollno: "1",
+    Age: "20",
+    ContactNo:"123",
+    EmailId:"abc@gmail.com"
+})
+
+db.student.insert({
+    Rollno: "2",
+    Age: "20",
+    ContactNo:"234",
+    EmailId:"aaa@gmail.com"
+})
+
+db.student.insert({
+    Rollno: "3",
+    Age: "20",
+    ContactNo:"456",
+    EmailId:"bbb@gmail.com"
+})
+
+db.student.find()
+
+db.student.insert({
+    Rollno: "10",
+    Age: "20",
+    ContactNo:"789",
+    EmailId:"ccc@gmail.com"
+})
+
+db.student.update({
+    "Rollno":"10"
+},
+{
+    $set:
+    {"EmailId":"changed@gmail.com"}
+})
+
+
+db.student.insert({
+    Name:"ABC",
+    Rollno: "11",
+    Age: "20",
+    ContactNo:"987",
+    EmailId:"ddd@gmail.com"
+})
+
+db.student.update({
+    "Rollno":"11"
+},
+{
+    $set:
+    {"Name":"FEM"}
+})
+
+
